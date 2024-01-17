@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "584141500398",
+    "project_id": "circlecare-a52c7",
+    "storage_bucket": "circlecare-a52c7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:584141500398:android:24bb35ef199e1f09f1e8ff",
+        "android_client_info": {
+          "package_name": "com.circlecare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "584141500398-o1k8rhma7df09rkh2den2mmgjqacf21e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.circlecare",
+            "certificate_hash": "81864f9edc29aef2b9ca413d7803ebb3a85057a6"
+          }
+        },
+        {
+          "client_id": "584141500398-7iv5ac0ejca6s4ied3bbrj3cr09l0acc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoYhUTCmcxurajKm2JdRt71qyztQMqPxA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "584141500398-7iv5ac0ejca6s4ied3bbrj3cr09l0acc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
