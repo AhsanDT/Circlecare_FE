@@ -47,12 +47,12 @@ const BottomHome = () => {
     console.log("new notification", msg);
   });
 
-  useEffect(() => {
-    Socket.on("new notification", (msg) => {
-      console.log("new notification", msg);
-    });
+  // useEffect(() => {
+  //   Socket.on("new notification", (msg) => {
+  //     console.log("new notification", msg);
+  //   });
 
-  }, [])
+  // }, [])
 
   return (
     <>

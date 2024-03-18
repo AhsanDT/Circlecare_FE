@@ -118,6 +118,7 @@ const styles = StyleSheet.create({
     },
     searchInput: {
         flex: 1,
+        color: 'black',
         paddingVertical: 6,
         fontSize: 16,
     },

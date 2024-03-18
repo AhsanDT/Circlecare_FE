@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 const DropdownComponent = (props) => {
     const isRTL = I18nManager.isRTL;
 
-    const { label, placeholder, value, setValue, data, allowArabic, error, ...rest } = props;
+    const { required = false, label, placeholder, value, setValue, data, allowArabic, error, ...rest } = props;
     const [isFocus, setIsFocus] = useState(false);
 
     const renderLabel = () => {
@@ -18,6 +18,15 @@ const DropdownComponent = (props) => {
             );
         }
         return null;
+    };
+
+    const renderPlaceholder = () => {
+        return (
+            <Text style={styles.placeholder}>
+                {' ' + placeholder + ' '}
+                {required && <Text style={{ color: 'red' }}>*</Text>}
+            </Text>
+        );
     };
 
     const renderRightIcon = () => (
@@ -54,7 +63,8 @@ const DropdownComponent = (props) => {
                 maxHeight={300}
                 labelField={isRTL && allowArabic ? "arabic" : "label"}
                 valueField="value"
-                placeholder={!isFocus ? placeholder : '...'}
+                placeholder={!isFocus ? renderPlaceholder() : '...'}
+                // placeholder={!isFocus ? placeholder : '...'}
                 value={value}
                 onFocus={() => setIsFocus(true)}
                 onBlur={() => setIsFocus(false)}

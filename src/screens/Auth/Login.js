@@ -93,6 +93,7 @@ const Login = () => {
                     {Loginerror ? <Text style={styles.error}>{'*' + Loginerror}</Text> : null}
                     <View style={styles.inputContainer}>
                       <AuthInput
+                        required
                         placeholder={t('email')}
                         value={values.email}
                         onChangeText={handleChange('email')}
@@ -103,6 +104,7 @@ const Login = () => {
                       />
 
                       <AuthInput
+                        required
                         placeholder={t('password')}
                         value={values.password}
                         onChangeText={handleChange('password')}

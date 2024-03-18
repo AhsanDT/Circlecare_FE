@@ -3,10 +3,8 @@ import {
   View,
   Text,
   StyleSheet,
-  TextInput,
   SafeAreaView,
   StatusBar,
-  I18nManager,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CheckBox from '@react-native-community/checkbox';
@@ -22,10 +20,11 @@ import { moderateScale, moderateScaleVertical, textScale } from '../../utils/res
 import { showError } from '../../helper/customToast';
 import DropdownComponent from '../../components/DropdownComponent';
 import MultiSelectComponent from '../../components/MultiSelectComponent';
+import AuthInput from '../../components/Auth/Input';
 
 const Demographics2 = () => {
   const { t } = useTranslation()
-  const isRTL = I18nManager.isRTL;
+  // const isRTL = I18nManager.isRTL;
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -52,6 +51,7 @@ const Demographics2 = () => {
     { label: 'Skin cancer', arabic: 'سرطان الجلد', value: 'Skin cancer' },
     { label: 'Uterine cancer', arabic: 'سرطان الرحم', value: 'Uterine cancer' },
     { label: 'Vaginal and vulvar cancers', arabic: 'سرطانات المهبل والفرج', value: 'Vaginal and vulvar cancers' },
+    { label: 'Other', arabic: 'شئ آخر غير ما سبق', value: 'Other' },
   ];
   const tumorStageList = [
     { label: 'None', arabic: 'غير محددة', value: 'None' },
@@ -173,6 +173,7 @@ const Demographics2 = () => {
       <StatusBar barStyle={'dark-content'} />
       <View style={styles.container}>
         <Header onPress={() => navigation.goBack()} />
+
         <ScrollView overScrollMode='never' contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
           <View flex={1}>
             <View style={{ marginTop: 15, paddingHorizontal: moderateScale(20) }}>
@@ -194,6 +195,7 @@ const Demographics2 = () => {
             {toggleCheckBox == false ? (
               <View style={{ gap: 14, marginTop: 14, marginHorizontal: moderateScale(20) }}>
                 <DropdownComponent
+                  required
                   placeholder={t('cancer_type')}
                   value={cancerType}
                   setValue={setCancerType}
@@ -202,6 +204,7 @@ const Demographics2 = () => {
                 />
 
                 <DropdownComponent
+                  required
                   placeholder={t('stage_of_tumor')}
                   value={tumorStage}
                   setValue={setTumorStage}
@@ -210,6 +213,7 @@ const Demographics2 = () => {
                 />
 
                 <MultiSelectComponent
+                  required
                   placeholder={t('current_cancer_treatments')}
                   value={currentCancerTreatment}
                   setValue={setCurrentCancerTreatment}
@@ -218,6 +222,7 @@ const Demographics2 = () => {
                 />
 
                 <DropdownComponent
+                  required
                   placeholder={t('other_conditions')}
                   value={otherConditions}
                   setValue={setOtherConditions}
@@ -226,30 +231,16 @@ const Demographics2 = () => {
                 />
 
                 {/* Year Of Diagnosis */}
-                <View
-                  style={{
-                    height: 50,
-                    backgroundColor: 'transparent',
-                    borderRadius: 10,
-                    justifyContent: "center",
-                    borderWidth: 0.5,
-                    borderColor: 'lightgrey',
-                  }}>
-                  <TextInput
-                    style={{
-                      textAlign: isRTL ? 'right' : 'left',
-                      fontSize: 16, color: 'black',
-                      paddingHorizontal: 5,
-                    }}
-                    keyboardType="numeric"
-                    placeholder={' ' + t('year_of_diagnosis')}
-                    placeholderTextColor={'lightgrey'}
-                    value={yod}
-                    onChangeText={value => setYod(value)}
-                  />
-                </View>
+                <AuthInput
+                  required
+                  placeholder={t('year_of_diagnosis')}
+                  value={yod}
+                  onChangeText={value => setYod(value)}
+                  keyboardType="numeric"
+                />
 
                 <DropdownComponent
+                  required
                   placeholder={t('severity_of_symptoms')}
                   value={severityOfSymptoms}
                   setValue={setSeverityOfSymptoms}
@@ -259,6 +250,7 @@ const Demographics2 = () => {
                 />
 
                 <DropdownComponent
+                  required
                   placeholder={t('regular_checkup_reminders')}
                   value={regularCheckupReminder}
                   setValue={setRegularCheckupReminder}
@@ -268,6 +260,7 @@ const Demographics2 = () => {
                 />
 
                 <DropdownComponent
+                  required
                   placeholder={t('regular_doctor_appointments')}
                   value={regularDoctorsAppointments}
                   setValue={setRegularDoctorsAppointments}
@@ -283,7 +276,6 @@ const Demographics2 = () => {
             <GradiantButton title={t('the_next')} onPress={onNext} />
           </View>
         </ScrollView>
-
       </View>
     </SafeAreaView>
   );

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { I18nManager, Image, SafeAreaView, StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
+import { I18nManager, Image, Keyboard, SafeAreaView, StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Bubble, GiftedChat } from 'react-native-gifted-chat';
 import Icon from 'react-native-vector-icons/MaterialIcons'
@@ -10,10 +10,10 @@ import { useTranslation } from 'react-i18next';
 
 import Header from '../../../components/Header';
 import { getChat, uploadChatImage } from '../../../redux/actions/user.action';
-import Socket from '../../../utils/Socket';
 import { useFocusEffect } from '@react-navigation/native';
 import { scale } from '../../../utils/responsiveSizes';
 import Colors from '../../../constants/Colors';
+import { AppContext } from '../../../context/AppContext';
 // import { media_base_Url } from '../../../config/config';
 
 const Support = () => {
@@ -24,6 +24,8 @@ const Support = () => {
     const userData = useSelector(state => state.auth?.profile)
     const support = useSelector(state => state.health?.support)
 
+    const { socket } = useContext(AppContext);
+
     const [chat, setChat] = useState([]);
     const [selectedImage, setSelectedImage] = useState(null);
     const [isUploading, setIsUploading] = useState(false);
@@ -31,23 +33,22 @@ const Support = () => {
 
     useFocusEffect(useCallback(() => {
         // for user active
-        Socket.on("connected", (res) => {
+        socket.on("connected", (res) => {
             res(true);
         });
 
         // for message Received
-        Socket.on("message received", (msg) => {
+        socket.on("message received", (msg) => {
             // console.log("message recieved", msg);
             setChat(prev => ([...prev, msg]))
         });
 
-        Socket.on("new notification", (msg) => {
+        socket.on("new notification", (msg) => {
             console.log("new notification", msg);
         });
 
-
         return () => {
-            Socket.off("message received");
+            socket.off("message received");
         };
     }, []))
 
@@ -63,7 +64,7 @@ const Support = () => {
         };
 
         handleGetChats();
-    }, [dispatch]);
+    }, []);
 
     const handleImagePicker = () => {
         const options = {
@@ -110,6 +111,7 @@ const Support = () => {
     }
 
     const handleSendMessage = (msg = []) => {
+        Keyboard.dismiss();
         let chatData = {
             id: userData?._id,
             chatId: support?._id,
@@ -117,7 +119,7 @@ const Support = () => {
             file: ""
         };
 
-        Socket.emit("new message", chatData);
+        socket.emit("new message", chatData);
     };
 
     const renderActions = useCallback(() => {

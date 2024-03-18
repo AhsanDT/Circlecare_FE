@@ -34,32 +34,6 @@ const LanguageChange = ({ navigation }) => {
     },
   ];
 
-
-  useEffect(() => {
-    const fetchStoredLanguage = async () => {
-      try {
-        const storedLanguage = await getDeviceLanguageFromStorage();
-        if (storedLanguage && storedLanguage !== selectedLanguage) {
-          // Dispatch action to set language in reducer
-          let langName = storedLanguage == 'ar' ? 'Arabic' : 'English'
-          dispatch({
-            type: LANGUAGE, payload: {
-              language: langName,
-              languageShort: storedLanguage
-            }
-          });
-
-          // Handle language change logic
-          handleLanguageChange({ key: storedLanguage });
-        }
-      } catch (error) {
-        console.error('Error fetching stored language:', error);
-      }
-    };
-
-    // fetchStoredLanguage();
-  }, [selectedLanguage]);
-
   const handleContinueButton = () => {
     if (!selectedLanguage) {
       showMessage({
@@ -111,7 +85,7 @@ const LanguageChange = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
-      <StatusBar barStyle={'dark-content'} backgroundColor={Colors.white} />
+      <StatusBar barStyle={'dark-content'} backgroundColor={Colors.white} translucent={false} />
       <View style={styles.container}>
         <Header />
 

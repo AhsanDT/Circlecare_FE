@@ -19,7 +19,6 @@ const dataToFormData = data => {
 export const GetProfile = () => async dispatch => {
   try {
     const response = await instance.get(`/appuser/app-user`);
-    // console.log("GetProfile ", response.data.data);
     dispatch({ type: types.PROFILE, payload: response.data.data });
   } catch (error) {
     console.log(JSON.stringify(error));
@@ -32,7 +31,6 @@ export const UpdateProfile = (data, navigation, setLoading, setSuccess) => async
     const response = await instance.put(`/appuser/app-user`, data);
     if (response) {
       dispatch({ type: types.PROFILE, payload: response?.data?.data });
-      // await dispatch(GetProfile());
       setSuccess(true)
       setTimeout(() => {
         navigation.navigate('Tab2');
@@ -48,19 +46,20 @@ export const UpdateProfile = (data, navigation, setLoading, setSuccess) => async
 
 export const uploadAvatar = (imageData, setSuccess) => async (dispatch) => {
   const config = {
-    headers: { 'Content-Type': 'multipart/form-data' }
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
   }
 
   try {
     const formData = new FormData();
     formData.append('file', {
-      uri: imageData.uri,
+      uri: imageData,
       type: 'image/jpeg',
       name: 'profile-picture'
     });
 
     const response = await instance.patch('/appuser/app-user-update-avatar', formData, config);
-    console.log("Response ===> ", response?.data);
 
     if (response) {
       setSuccess(true)
@@ -71,10 +70,12 @@ export const uploadAvatar = (imageData, setSuccess) => async (dispatch) => {
   }
 };
 
-export const appUserDelete = (userId, setLoading) => async dispatch => {
+export const appUserDelete = (setLoading, logout) => async dispatch => {
   try {
     setLoading(true)
-    await instance.delete(`/appuser/app-user-delete/${userId}`);
+    await instance.delete(`/appuser/app-user-delete/`);
+    dispatch({ type: types.LOG_OUT });
+    await logout();
     return true;
   } catch (error) {
     showError(error?.response?.msg || error?.response?.data?.error || 'Something went wrong!')
@@ -173,7 +174,7 @@ export const dailyTasks = (body, language = 'English', score = 0, setLoading = (
       content_type: language,
       score: score.toString(),
       // from_date: from_date || '',
-      to_date: to_date || '',
+      // to_date: to_date || '',
     });
 
     const url = `/appuser/daily-tasks?${queryParams.toString()}`;
@@ -235,8 +236,6 @@ export const removeDailyTask = (id) => async dispatch => {
   }
 };
 export const getDailyTask = body => async dispatch => {
-  //  alert(date1,date2)
-  console.log(body);
   try {
     const response = await instance.get(
       `/appuser/daily-tasks?from_date=${body?.date1}&to_date=${body?.date2}&task_type=Article&content_type=English`,
@@ -291,18 +290,15 @@ export const cares = (language = 'English', setLoading = () => null) => async di
     setLoading(false)
   }
 };
-export const CareMarkAsDone = (id) => async dispatch => {
+export const CareMarkAsDone = (id, language = 'English') => async dispatch => {
   try {
     const response = await instance.post(`/appuser/care-mark-as-done/${id}`);
     if (response) {
-      dispatch(cares())
+      dispatch(cares(language))
       return response;
     }
   } catch (error) {
-    const errorMessage =
-      error?.response?.data?.error || 'Something went wrong!';
-    showError(errorMessage);
-    console.log(JSON.stringify(error));
+    console.log("CareMarkAsDone Error ==> ", JSON.stringify(error) || 'Something went wrong!');
   }
 };
 

@@ -9,15 +9,14 @@ import {
     Image,
     I18nManager,
 } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
 import LinearGradient from 'react-native-linear-gradient';
 import FastImage from 'react-native-fast-image'
-import { useTranslation } from 'react-i18next';
 
 import { scale, textScale, width } from '../../../utils/responsiveSizes';
-import { FontFamily } from '../../../../GlobalStyles';
 import { media_base_Url } from '../../../config/config';
-import { useDispatch } from 'react-redux';
 import { CareMarkAsDone } from '../../../redux/actions/user.action';
 import { useNavigation } from '@react-navigation/native';
 
@@ -28,11 +27,15 @@ const CareList = ({ data = [], loading = false }) => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
+    const language = useSelector((state) => state.auth.language)
+
     const handleNavigate = (elem) => {
         navigation.navigate('ViewArticle', { article: elem })
 
         setTimeout(() => {
-            if (!elem?.is_watched) dispatch(CareMarkAsDone(elem?._id))
+            dispatch(CareMarkAsDone(elem?._id, language))
+
+            // if (!elem?.is_watched) dispatch(CareMarkAsDone(elem?._id))
         }, 1000);
     }
 
@@ -183,16 +186,18 @@ const styles = StyleSheet.create({
         resizeMode: 'contain'
     },
     titleTxt: {
-        fontSize: textScale(16),
+        fontSize: textScale(18),
         textAlign: 'left',
-        color: '#4E4E4E',
-        fontFamily: FontFamily.satoshiVariableBold,
-        fontWeight: '900'
+        color: 'black',
+        fontWeight: '700',
+        // color: '#4E4E4E',
+        // fontFamily: FontFamily.satoshiVariableBold,
     },
     descTxt: {
         fontSize: textScale(12),
         textAlign: 'left',
-        color: '#8B8B8B'
+        color: 'black',
+        // color: '#8B8B8B'
     },
 
 

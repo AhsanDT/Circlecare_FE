@@ -31,7 +31,7 @@ const AppHeader = () => {
 								<Image
 									style={styles.groupIcon}
 									resizeMode="contain"
-									source={isRTL ? require('../../assets/logos/logo_ar.png') : require('../../assets/logos/logoNew.png')}
+									source={require('../../assets/logos/logoNew.png')}
 								/>
 								<View flex={1}>
 									<Text style={styles.welcomeTxt}>{t('welcome_back')}</Text>

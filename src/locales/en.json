@@ -10,7 +10,7 @@
     "or_sign_in_using": "or sign in using",
     "sign_in": "Sign In",
     "sign_up": "Sign Up",
-    "dont_have_an_account": "Don't have and account?",
+    "dont_have_an_account": "Don't have an account?",
     "kindly_enter_your_email_so_we_can": "Kindly enter your email so we can send you a verification.",
     "send_verificarion": "Send Verification",
     "lets_verify_you": "Let’s Verify You",
@@ -38,13 +38,15 @@
     "by_signing_up_to_you_account_you_are_agree": "By signing up to you account, you are agree to our",
     "privacy_and_policy": "Privacy & Policy",
     "and": "and",
-    "have_an_account": "Have an account?",
+    "have_an_account": "Already have an account?",
+    // Profile
     "profile": "Profile",
     "profile_tab": "Profile",
     "personal_account": "Personal account",
     "health_score": "Health Score:",
     "edit_profile": "Edit Profile",
     "change_password": "Change password",
+    "change_language": "Change Language",
     "support": "Support",
     "tutorial": "Tutorial",
     "help_and_support": "Help and Support",
@@ -143,5 +145,13 @@
     "year_of_diagnosis": "Year of Diagnosis Eg (2009)",
     "severity_of_symptoms": "Severity of Symptoms",
     "regular_checkup_reminders": "Regular Checkup Reminders",
-    "regular_doctor_appointments": "Regular doctor's appointments"
+    "regular_doctor_appointments": "Regular doctor's appointments",
+    "question": "Question",
+    "choose_region_of_pain_so_we_can_determine": "Choose a region of pain so we can determine what to recommend for you.",
+    // Amal Screen
+    "please_choose_the_path_to_relax": "Please Choose the Path to Relax",
+    "relaxation_for_inner_tranquility": "RELAXATION FOR INNER TRANQUILITY",
+    "proper_breathing_for_calm_assurance": "PROPER BREATHING FOR CALM ASSURANCE",
+    "posture_for_self_confidence": "POSTURE FOR \nSELF-CONFIDENCE",
+    "meditation_for_serenity": "MEDITATION FOR SERENITY"
 }

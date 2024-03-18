@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { I18nManager, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { I18nManager, StyleSheet, TouchableOpacity, View, Keyboard, KeyboardEvent } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 
 import Icon, { Icons } from '../components/Icons';
@@ -70,7 +70,7 @@ export default function AnimTab1() {
   const { t } = useTranslation();
   const isRTL = I18nManager.isRTL;
 
-  const TabArr = [
+  const tabArray = [
     { route: 'Home', label: t('home'), type: Icons.Feather, icon: 'home', component: ColorScreen },
     { route: 'Discover', label: t('discover'), type: Icons.Feather, icon: 'search', component: ColorScreen },
     { route: 'Care', label: t('care'), type: Icons.Fontisto, icon: 'smiley', component: ColorScreen },
@@ -78,7 +78,33 @@ export default function AnimTab1() {
     { route: 'Profile', label: t('profile_tab'), type: Icons.FontAwesome, icon: 'user-circle-o', component: ColorScreen },
   ];
 
-  const determineTabArray = (isRTL) => (isRTL ? TabArr.slice().reverse() : TabArr);
+  const [isKeyboardOpen, setKeyboardOpen] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      handleKeyboardDidShow
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      handleKeyboardDidHide
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
+  const handleKeyboardDidShow = (event: KeyboardEvent) => {
+    setKeyboardOpen(true);
+  };
+
+  const handleKeyboardDidHide = () => {
+    setKeyboardOpen(false);
+  };
+
+  const determineTabArray = (isRTL) => (isRTL ? tabArray.slice().reverse() : tabArray);
   const array = determineTabArray(isRTL);
 
   return (
@@ -86,6 +112,7 @@ export default function AnimTab1() {
       initialRouteName='Home'
       screenOptions={{
         headerShown: false,
+        tabBarHideOnKeyboard: true,
         tabBarStyle: {
           ...styles.tabBar,
           shadowColor: '#000',
@@ -95,6 +122,7 @@ export default function AnimTab1() {
           },
           shadowOpacity: 0.3,
           shadowRadius: 4,
+          display: isKeyboardOpen ? 'none' : 'flex',
         },
       }}
     >

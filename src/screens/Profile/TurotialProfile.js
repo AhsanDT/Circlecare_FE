@@ -18,18 +18,6 @@ const TutorialProfile = () => {
             justifyContent: 'center',
             marginTop: 20,
           }}>
-          {/* <View style={[styles.statusBarIphoneXOrNewe, styles.timePosition]}>
-        <Image
-          style={styles.rightSideIcon}
-          resizeMode="cover"
-          source={require("../../assets/right-side2.png")}
-        />
-        <View style={[styles.leftSide, styles.timeLayout]}>
-          <View style={[styles.time, styles.timeLayout]}>
-            <Text style={[styles.text, styles.textLayout]}>9:41</Text>
-          </View>
-        </View>
-      </View> */}
           <View style={{ alignItems: 'center', justifyContent: 'center' }}>
             <View style={{}}>
               <Image

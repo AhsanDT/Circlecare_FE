@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, FlatList, I18nManager, SafeAreaView, StatusBar, } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, FlatList, I18nManager, SafeAreaView, StatusBar, Platform, } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
@@ -35,7 +35,8 @@ export const emojis = [
     id: 3,
     image: require('../../../assets/hurts-little-more.png'),
     label: `(3-4) Hurts\nlittle more`,
-    arabic: '4-3 يؤلم أكثر قلي ًل',
+    arabic: '4-3 ؤلم اكثر قليلاً',
+    // arabic: '4-3 يؤلم أكثر قلي ًل',
     value: 'Hurts a little more',
     start: 3,
     end: 4
@@ -53,7 +54,7 @@ export const emojis = [
     id: 5,
     image: require('../../../assets/hurts-whole-lot.png'),
     label: `(7-8) Hurts\nwhole lot`,
-    arabic: '8-7 يؤلمني كثي ًرا',
+    arabic: '8-7 يؤلمني كثيراً',
     value: 'Hurts whole lot',
     start: 7,
     end: 8
@@ -62,7 +63,8 @@ export const emojis = [
     id: 6,
     image: require('../../../assets/hurts-worst1.png'),
     label: `(9-10) Hurts\nworst`,
-    arabic: '10-9 مؤلم ج ًدا',
+    arabic: '10-9 مولم جداً',
+    // arabic: '10-9 مؤلم ج ًدا',
     value: 'Hurts worst',
     start: 9,
     end: 10
@@ -206,7 +208,7 @@ const PainScale = ({ navigation, route }) => {
           {/* Slider */}
           <View style={{ marginTop: 20 }}>
             <Slider
-              style={{ marginLeft: -5 }}
+              style={{ marginLeft: isRTL ? -5 : 0, marginRight: isRTL ? 0 : -5 }}
               minimumValue={0}
               maximumValue={10}
               step={1}
@@ -215,8 +217,9 @@ const PainScale = ({ navigation, route }) => {
               maximumTrackTintColor={Color.darkslategray_200}
               value={painLevel}
               onValueChange={(value) => setPainLevel(value)}
+              inverted={Platform.OS == 'ios' ? false : Platform.OS == 'android' && isRTL ? true : false}
             />
-            <View style={{ flexDirection: isRTL ? "row-reverse" : 'row', marginHorizontal: 10, justifyContent: "space-between" }}>
+            <View style={{ flexDirection: 'row', marginHorizontal: 10, justifyContent: "space-between" }}>
               {painscale?.map((i) => {
                 return (
                   <Text key={`count-${i.id}`} style={styles.count}>{i?.id}</Text>
@@ -224,7 +227,7 @@ const PainScale = ({ navigation, route }) => {
               })}
             </View>
             <View style={{ flexDirection: "row", marginHorizontal: 10, justifyContent: "space-between" }}>
-              <Text style={[styles.painname, { textAlign: 'left' }]}>No Pain</Text>
+              <Text style={[styles.painname, { textAlign: 'left' }]}>{`No\nPain`}</Text>
               <Text style={[styles.painname, { textAlign: 'center' }]}>{`Distressing\nPain`}</Text>
               <Text style={[styles.painname, { textAlign: 'right' }]}>{`Unbearable\nPain`}</Text>
             </View>
@@ -236,7 +239,7 @@ const PainScale = ({ navigation, route }) => {
             renderItem={renderItem}
             keyExtractor={(item) => `${item.id}`}
             numColumns={3}
-            columnWrapperStyle={{ justifyContent: 'space-between', paddingHorizontal: 20, flexDirection: isRTL ? 'row-reverse' : 'row' }}
+            columnWrapperStyle={{ justifyContent: 'space-between', flexDirection: isRTL ? 'row' : 'row' }}
             contentContainerStyle={{ flex: 1, justifyContent: 'center' }}
             ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
             ListHeaderComponent={() => (
@@ -244,8 +247,7 @@ const PainScale = ({ navigation, route }) => {
                 <Text style={styles.title}>{`You Select ${painLevel}`}</Text>
                 <Text style={[styles.title]}>{t('pain_rating_scale')}</Text>
               </View>
-            )
-            }
+            )}
           />
 
           {/* Button */}

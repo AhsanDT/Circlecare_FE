@@ -19,7 +19,7 @@ const data = [
     id: 2,
     status: false,
     name: "head",
-    arabic: "رأس"
+    arabic: "الرأس"
   },
   {
     id: 3,
@@ -203,7 +203,7 @@ const PainAnalog = ({ navigation }) => {
 
   let selectedBodyPart = data.find(e => e.name === name)
 
-  console.log("selectedBodyPart ===>", selectedBodyPart);
+  // console.log("selectedBodyPart ===>", selectedBodyPart);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
@@ -215,7 +215,7 @@ const PainAnalog = ({ navigation }) => {
         <ScrollView overScrollMode='never' contentContainerStyle={{ flexGrow: 1, paddingBottom: 30 }} showsVerticalScrollIndicator={false}>
           <View flex={1}>
             <View style={styles.container}>
-              <Text style={styles.txt}>Choose a region of pain so we can determine what to recommend for you.</Text>
+              <Text style={styles.txt}>{t('choose_region_of_pain_so_we_can_determine')}</Text>
               <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 20, }}>
                 <Image style={{ width: scale(342), height: scale(500), resizeMode: 'contain' }} source={require('../../../assets/group-1000005758.png')} />
                 <View style={{ position: "absolute", alignSelf: "center", marginTop: 10 }}>
@@ -272,6 +272,7 @@ const styles = StyleSheet.create({
     paddingTop: 20
   },
   txt: {
+    textAlign: 'left',
     fontSize: textScale(13),
     fontWeight: '400',
     color: '#2E2E2E',

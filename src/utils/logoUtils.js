@@ -3,13 +3,15 @@
 import { useSelector } from 'react-redux';
 
 const useDetermineLogo = () => {
-    const language = useSelector((state) => state?.auth?.languageShort);
+    // const language = useSelector((state) => state?.auth?.languageShort);
 
-    if (language == 'ar') {
-        return require('../../assets/logos/logo_ar.png');
-    } else {
-        return require('../../assets/logos/logoNew.png');
-    }
+    // if (language == 'ar') {
+    //     return require('../../assets/logos/logo_ar.png');
+    // } else {
+    //     return require('../../assets/logos/logoNew.png');
+    // }
+
+    return require('../../assets/logos/logoNew.png');
 };
 
 export default useDetermineLogo;

@@ -56,7 +56,8 @@ const ViewArticle = () => {
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
-            <StatusBar barStyle={'dark-content'} />
+            <StatusBar barStyle={'dark-content'} backgroundColor={Colors.white} translucent={false} />
+            {/* <StatusBar barStyle={'dark-content'} /> */}
             <View style={styles.container}>
                 <Header title={t('read')} />
                 {/* <Header title={type[0]?.toUpperCase() + type?.slice(1)} onPress={handleClose} /> */}
@@ -93,8 +94,10 @@ const styles = StyleSheet.create({
     title: {
         fontSize: textScale(24),
         textAlign: 'left',
-        color: '#4E4E4E',
-        fontWeight: '900'
+        color: 'black',
+        fontWeight: '700',
+        // fontWeight: '900',
+        // color: '#4E4E4E',
     },
     img: {
         height: scale(214),
@@ -105,7 +108,8 @@ const styles = StyleSheet.create({
     content: {
         fontSize: textScale(14),
         textAlign: 'left',
-        color: '#8B8B8B',
+        color: 'black',
+        // color: '#8B8B8B',
         fontWeight: '500'
     }
 });

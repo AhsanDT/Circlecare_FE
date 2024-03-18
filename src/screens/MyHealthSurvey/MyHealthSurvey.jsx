@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, I18nManager, SafeAreaView, StatusBar, } from 'react-native';
+import { useState, useEffect } from 'react';
+import { View, StyleSheet, SafeAreaView, StatusBar, } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 

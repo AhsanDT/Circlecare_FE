@@ -1,12 +1,16 @@
 import { useCallback, useMemo, useState } from 'react'
 import { StyleSheet, Text, View, } from 'react-native';
-import { FontFamily } from '../../../GlobalStyles';
-import { moderateScaleVertical, textScale } from '../../utils/responsiveSizes';
-import Colors from '../../constants/Colors';
 import { Dropdown } from 'react-native-element-dropdown';
+import { useTranslation } from 'react-i18next';
+
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
+import { commonStyles } from './styles';
+
 const MultipleChoice = ({ handleAnswers, question, currentIndex, length }) => {
+    const { t } = useTranslation();
+    // const isRTL = I18nManager.isRTL;
+
     const [isFocus, setIsFocus] = useState(false);
     const [value, setValue] = useState(null);
 
@@ -29,8 +33,12 @@ const MultipleChoice = ({ handleAnswers, question, currentIndex, length }) => {
 
     return (
         <>
-            <Text style={styles.question}>{question.question}</Text>
-            <Text style={styles.totalQues}>{`${++currentIndex}/${length}`}</Text>
+            <Text style={commonStyles.totalQues}>{`${t('question')} ${++currentIndex}/${length}`}</Text>
+            <Text style={commonStyles.question}>
+                {question.question}
+                {question?.is_required && <Text style={{ color: 'red' }}> * </Text>}
+            </Text>
+
             <View style={{ marginTop: 10 }}>
                 <Dropdown
                     style={[styles.dropdown, isFocus && { borderColor: 'lightgrey', backgroundColor: '##F6F6F6' }]}
@@ -64,22 +72,6 @@ const MultipleChoice = ({ handleAnswers, question, currentIndex, length }) => {
 export default MultipleChoice
 
 const styles = StyleSheet.create({
-    question: {
-        fontSize: textScale(18),
-        fontWeight: '700',
-        lineHeight: textScale(20),
-        fontFamily: FontFamily.interBold,
-        color: Colors.purple
-    },
-    totalQues: {
-        paddingVertical: moderateScaleVertical(14),
-        fontSize: textScale(18),
-        lineHeight: textScale(20),
-        fontFamily: FontFamily.interRegular,
-        color: Colors.purple
-    },
-
-
     // New DropDown
     dropdown: {
         height: 50,

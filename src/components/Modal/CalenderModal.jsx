@@ -70,7 +70,7 @@ const CalenderModal = ({ open, setOpen, date, setDate }) => {
             const inputYear = parseInt(text, 10);
             const currentYear = moment().year();
 
-            if (!isNaN(inputYear) && inputYear >= 1950 && inputYear <= currentYear) {
+            if (!isNaN(inputYear) && inputYear <= currentYear) {
                 setYear(inputYear);
                 const updatedDate = moment(selectedDate, 'DD-MM-YYYY')
                     .year(inputYear)
@@ -78,7 +78,7 @@ const CalenderModal = ({ open, setOpen, date, setDate }) => {
                 setSelectedDate(updatedDate);
                 setError('');
             } else {
-                setError('Please enter a valid year between 1950 and current year');
+                setError('Please enter a valid 4-digit year');
             }
         } else {
             setError('Please enter a valid 4-digit year');

@@ -41,7 +41,7 @@ const MyHealthSurvey = ({ navigation }) => {
   const screenWidth = Dimensions.get('window').width;
 
   const [activeTab, setActiveTab] = useState(0);
-  const [activeTab1, setActiveTab1] = useState('Pain Chart');
+  const [activeTab1, setActiveTab1] = useState(0);
   const [open, setOpen] = useState(false);
   const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -139,24 +139,6 @@ const MyHealthSurvey = ({ navigation }) => {
     };
   };
 
-  const data = {
-    datasets: [
-      {
-        data: A,
-        color: () => '#8853A7',
-        strokeWidth: 1,
-      },
-    ],
-  };
-  const data1 = {
-    datasets: [
-      {
-        data: B,
-        color: () => 'red',
-        strokeWidth: 1,
-      },
-    ],
-  };
   const SLDATA = {
     datasets: [
       {
@@ -207,26 +189,6 @@ const MyHealthSurvey = ({ navigation }) => {
     labelColor: () => '#8853A7',
   };
 
-  const chartConfig1 = {
-    backgroundGradientFrom: '#FFF',
-    backgroundGradientFromOpacity: 0,
-    backgroundGradientTo: '#FFF',
-    backgroundGradientToOpacity: 0.5,
-    color: () => '#8853A7',
-    strokeWidth: 2, // optional, default 3
-    barPercentage: 0.5,
-    useShadowColorFromDataset: false, //
-    labelColor: () => '#FFF',
-    propsForDots: {
-      r: '1',
-      strokeWidth: '2',
-      stroke: '#8853A7',
-    },
-    propsForBackgroundLines: {
-      strokeWidth: 0,
-    },
-  };
-
   const handleInputChange = (key, value) => {
     setState(prev => ({ ...prev, [key]: value }))
   }
@@ -254,6 +216,29 @@ const MyHealthSurvey = ({ navigation }) => {
       },
     ],
   };
+
+  let options = [
+    {
+      english: 'Pain Chart',
+      arabic: 'مقياس مستوي الألم'
+    },
+    {
+      english: 'BP',
+      arabic: ''
+    },
+    {
+      english: 'SL',
+      arabic: ''
+    },
+    {
+      english: 'SH',
+      arabic: ''
+    },
+    {
+      english: 'Weight',
+      arabic: 'الوزن'
+    }
+  ]
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
@@ -377,25 +362,26 @@ const MyHealthSurvey = ({ navigation }) => {
             {activeTab === 1 && (
               <>
                 <View style={[styles.tabItemsContainer, isRTL && { flexDirection: 'row-reverse' }]}>
-                  {['Pain Chart', 'BP', 'SL', 'SH', 'Weight'].map(e => (
+                  {options.map((e, i) => (
                     <TouchableOpacity
-                      key={e}
+                      key={i}
                       style={[
                         styles.tabItemSmall,
-                        activeTab1 === e && styles.activeTabSmall,
+                        activeTab1 === i && styles.activeTabSmall,
                       ]}
-                      onPress={() => setActiveTab1(e)}>
+                      onPress={() => setActiveTab1(i)}>
                       <Text
                         style={[
                           styles.tabTextSmall,
                           {
-                            color: activeTab1 === e ? "#BF6BBB" : '#999',
-                            borderBottomWidth: activeTab1 === e ? 2 : 0,
-                            borderBottomColor: activeTab1 === e ? "#BF6BBB" : 'transparent'
+                            color: activeTab1 === i ? "#BF6BBB" : '#999',
+                            borderBottomWidth: activeTab1 === i ? 2 : 0,
+                            borderBottomColor: activeTab1 === i ? "#BF6BBB" : 'transparent'
                           },
                         ]}>
-                        {e}
+                        {isRTL ? e.arabic ? e.arabic : e.english : e.english}
                       </Text>
+                      {activeTab1 === i && <View style={{ borderWidth: 1.2, borderColor: '#BF6BBB', width: '100%' }} />}
                     </TouchableOpacity>
                   ))}
                 </View>
@@ -413,17 +399,17 @@ const MyHealthSurvey = ({ navigation }) => {
                   {/* Render the tabs' content below the tabs */}
                   <View style={styles.tabContentContainer}>
                     {/* Painchart */}
-                    {activeTab1 === 'Pain Chart' && (
+                    {activeTab1 === 0 && (
                       <>
                         <View style={{ marginTop: 20 }}>
-                          <Image
+                          {/* <Image
                             style={{
                               height: scale(200),
                               width: '100%',
                               borderRadius: 10,
                             }}
                             source={require('../../../assets/rectangle-22603.png')}
-                          />
+                          /> */}
                           {isLoading && <ActivityIndicator size='small' color="black" style={{ marginTop: 20 }} />}
 
 
@@ -450,7 +436,7 @@ const MyHealthSurvey = ({ navigation }) => {
                     )}
 
                     {/* BP */}
-                    {activeTab1 === 'BP' && (
+                    {activeTab1 === 1 && (
                       <>
                         {A.length || B.length ? <View style={{ marginTop: 10 }}>
                           <LineChart
@@ -516,7 +502,7 @@ const MyHealthSurvey = ({ navigation }) => {
                     )}
 
                     {/* SL */}
-                    {activeTab1 === 'SL' && (
+                    {activeTab1 === 2 && (
                       <>
                         {D.length ? <View style={{ marginTop: 10 }}>
                           <LineChart
@@ -560,7 +546,7 @@ const MyHealthSurvey = ({ navigation }) => {
                     )}
 
                     {/* SH */}
-                    {activeTab1 === 'SH' && (
+                    {activeTab1 === 3 && (
                       <>
                         {C.length ? <View style={{ marginTop: 10 }}>
                           <LineChart
@@ -606,7 +592,7 @@ const MyHealthSurvey = ({ navigation }) => {
                     )}
 
                     {/* WEIGHT */}
-                    {activeTab1 === 'Weight' && (
+                    {activeTab1 === 4 && (
                       <>
                         {E.length ? <View style={{ marginTop: 10 }}>
                           <LineChart

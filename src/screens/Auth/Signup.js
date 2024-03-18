@@ -10,28 +10,28 @@ import {
   SafeAreaView,
   StatusBar,
 } from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
-import { FontFamily, FontSize, Color, Border, Padding } from '../../../GlobalStyles';
 import { useDispatch } from 'react-redux';
-import moment from 'moment';
-import Feather from 'react-native-vector-icons/Feather';
 import { useTranslation } from 'react-i18next';
+import CheckBox from '@react-native-community/checkbox';
+import Feather from 'react-native-vector-icons/Feather';
+import moment from 'moment';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-import Colors from '../../constants/Colors';
-import { FORMONE } from '../../redux/const/const';
-import { EmailCheck } from '../../redux/actions/auth.actions';
-import { moderateScaleVertical, scale, textScale } from '../../utils/responsiveSizes';
 import AuthInput from '../../components/Auth/Input';
+import DropdownComponent from '../../components/DropdownComponent';
 import GradiantButton from '../../components/GradiantButton';
 import PoweredBy from '../../components/PoweredBy';
-import { showError } from '../../helper/customToast';
 import CalenderModal from '../../components/Modal/CalenderModal';
-import { getDataFromStorage } from '../../utils/asyncStorage';
-import DropdownComponent from '../../components/DropdownComponent';
 import useDetermineLogo from '../../utils/logoUtils';
 import useAuth from './useAuth';
+import { FontFamily, FontSize, Color, Border, Padding } from '../../../GlobalStyles';
+import Colors from '../../constants/Colors';
+import { moderateScaleVertical, scale, textScale } from '../../utils/responsiveSizes';
+import { getDataFromStorage } from '../../utils/asyncStorage';
+import { FORMONE } from '../../redux/const/const';
+import { EmailCheck } from '../../redux/actions/auth.actions';
+import { showError } from '../../helper/customToast';
 
 let genderList = [
   { label: 'Male', arabic: 'ذكر', value: 'Male' },
@@ -84,8 +84,6 @@ const Signup = ({ navigation }) => {
 
   const [error, setError] = useState(null);
   const [securetextentry, setSecuretextentry] = useState(true);
-  const [securetextentry1, setSecuretextentry1] = useState(true);
-  const [emailverify, setEmailverify] = useState(false)
 
   const { googleLoginHandler, appleLoginHandler } = useAuth(setLoading, setError);
 
@@ -109,33 +107,42 @@ const Signup = ({ navigation }) => {
       age--;
     }
 
+    if (age < 18) {
+      setToggleCheckBox(true)
+    } else {
+      setToggleCheckBox(false)
+    }
+
     return age.toString();
   }
 
   const handleSignup = async (values) => {
     Keyboard.dismiss();
-    const fcmToken = await getDataFromStorage('fcmToken');
-    setLoading(true);
+    try {
+      setLoading(true);
+      const fcmToken = await getDataFromStorage('fcmToken');
 
-    const res = await emailCheck(values.email.trim());
-    console.log("EMAIL TEST 1111 ====> ", res);
-    if (res) {
+      const res = await emailCheck(values.email.trim());
+      if (res) {
+        setLoading(false);
+        showError('Email Already Exists!', 'Please provide a valid email address.');
+        console.error('Please provide a valid email!');
+        return;
+      }
+
+      const body = {
+        ...values,
+        nickname: values?.first_name,
+        FCMToken: fcmToken,
+      };
+
+      await dispatch({ type: FORMONE, payload: body });
+      navigation.navigate('Demographics');
+    } catch (error) {
+      console.log("Error while signup!", error);
+    } finally {
       setLoading(false);
-      showError('Email Already Exists!', 'Please provide a valid email address.');
-      console.error('Please provide a valid email!');
-      return;
     }
-
-    const body = {
-      ...values,
-      FCMToken: fcmToken,
-    };
-
-    // console.log("body ======> ", body);
-
-    await dispatch({ type: FORMONE, payload: body });
-    setLoading(false);
-    navigation.navigate('Demographics');
   };
 
   return (
@@ -167,6 +174,7 @@ const Signup = ({ navigation }) => {
                   <View style={styles.inputFieldParent}>
                     {/* First Name */}
                     <AuthInput
+                      required
                       placeholder={t('first_name')}
                       value={values.first_name}
                       onChangeText={handleChange('first_name')}
@@ -176,6 +184,7 @@ const Signup = ({ navigation }) => {
 
                     {/* Last Name */}
                     <AuthInput
+                      required
                       placeholder={t('last_name')}
                       value={values.last_name}
                       onChangeText={handleChange('last_name')}
@@ -185,6 +194,7 @@ const Signup = ({ navigation }) => {
 
                     {/* Gender */}
                     <DropdownComponent
+                      required
                       placeholder={t('gender')}
                       value={values.gender}
                       setValue={(value) => handleChange('gender')(value)}
@@ -196,25 +206,13 @@ const Signup = ({ navigation }) => {
                     {/* DOB */}
                     <TouchableOpacity
                       onPress={() => setOpen(true)}
-                      style={{
-                        height: 56,
-                        width: '100%',
-                        backgroundColor: 'transparent',
-                        alignSelf: 'center',
-                        borderRadius: scale(7),
-                        borderWidth: 1,
-                        borderColor: Colors.light,
-                      }}>
+                      style={styles.dob}>
                       <View style={{ top: 10, marginHorizontal: 10 }}>
-                        <Text
-                          style={{
-                            fontSize: 16,
-                            marginTop: 5,
-                            color: values.dob === '' ? 'lightgrey' : 'black',
-                            textAlign: 'left'
-                          }}>
-                          {values.dob || t('date_of_birth')}
-                        </Text>
+                        {values.dob !== '' ? <Text style={styles.dobTxt}>
+                          {values.dob}
+                        </Text> : <Text style={[styles.dobTxt, { color: 'lightgray' }]}>{t('date_of_birth')}
+                          <Text style={{ color: 'red' }}> * </Text>
+                        </Text>}
                       </View>
                     </TouchableOpacity>
                     {touched.dob && errors.dob && <Text style={styles.errorMsg}>{errors.dob}</Text>}
@@ -230,10 +228,10 @@ const Signup = ({ navigation }) => {
                     {/* Check Under 18 */}
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                       <CheckBox
-                        style={styles.checkbox}
-                        disabled={false}
+                        // style={styles.checkbox}
+                        disabled={true}
                         value={toggleCheckBox}
-                        onValueChange={(newValue) => setToggleCheckBox(newValue)}
+                        // onValueChange={(newValue) => setToggleCheckBox(newValue)}
                         // onFillColor='red'
                         // onCheckColor='red'
                         // tintColor='#FFFF'
@@ -244,6 +242,7 @@ const Signup = ({ navigation }) => {
 
                     {/* Maritial Status */}
                     <DropdownComponent
+                      required
                       placeholder={t('marital_status')}
                       value={values.marital_status}
                       setValue={(value) => handleChange('marital_status')(value)}
@@ -254,6 +253,7 @@ const Signup = ({ navigation }) => {
 
                     {/* Email */}
                     <AuthInput
+                      required
                       placeholder={t('email')}
                       value={values.email}
                       onChangeText={handleChange('email')}
@@ -265,6 +265,7 @@ const Signup = ({ navigation }) => {
 
                     {/* Password */}
                     <AuthInput
+                      required
                       placeholder={t('password')}
                       value={values.password}
                       onChangeText={handleChange('password')}
@@ -285,20 +286,21 @@ const Signup = ({ navigation }) => {
 
                     {/* Confirm Password */}
                     <AuthInput
+                      required
                       placeholder={t('confirm_password')}
                       value={values.cpassword}
                       onChangeText={handleChange('cpassword')}
                       onBlur={handleBlur('cpassword')}
                       error={touched.cpassword && errors.cpassword}
-                      secureTextEntry={securetextentry1}
+                      secureTextEntry={securetextentry}
                       autoCapitalize="none"
                       leftIcon={
                         <Feather
-                          name={securetextentry1 ? 'eye-off' : 'eye'}
+                          name={securetextentry ? 'eye-off' : 'eye'}
                           size={18}
                           color={Colors.purple}
                           style={{ marginRight: 10 }}
-                          onPress={() => setSecuretextentry1(prev => !prev)}
+                          onPress={() => setSecuretextentry(prev => !prev)}
                         />
                       }
                     />
@@ -391,46 +393,28 @@ const styles = StyleSheet.create({
     color: Color.dimgray_300,
     textAlign: 'center',
   },
+  dob: {
+    height: 56,
+    width: '100%',
+    backgroundColor: 'transparent',
+    alignSelf: 'center',
+    borderRadius: scale(7),
+    borderWidth: 1,
+    borderColor: Colors.light,
+  },
+  dobTxt: {
+    fontSize: 16,
+    marginTop: 5,
+    color: 'black',
+    textAlign: 'left'
+  },
   inputFieldParent: {
     marginTop: moderateScaleVertical(20),
     alignSelf: 'center',
     width: scale(310),
     gap: 10
   },
-  input: {
-    width: scale(310),
-    height: 56,
-    borderColor: Colors.light,
-    borderWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-    borderRadius: 7,
-    color: 'black',
-    alignSelf: 'center',
-  },
-  inputPasswordContainer: {
-    height: 56,
-    width: scale(310),
-    backgroundColor: 'transparent',
-    alignSelf: 'center',
-    borderRadius: 7,
-    borderWidth: 1,
-    borderColor: Colors.light,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 5,
-  },
-  forgotPassword: {
-    marginTop: 6,
-    alignSelf: 'flex-end',
-  },
-  forgotPasswordTxt: {
-    color: '#265565',
-    textAlign: 'center',
-    fontSize: textScale(13),
-    fontFamily: FontFamily.poppinsMedium,
-    fontWeight: '500',
-  },
+
   orSignIn: {
     color: Color.lightgray,
     textAlign: 'center',
@@ -487,40 +471,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
 
-  checkbox: {
-    alignSelf: 'center',
-  },
-  pressable: {
-    borderRadius: Border.br_47xl,
-    height: '100%',
-    backgroundColor: 'transparent',
-    width: '100%',
-  },
-  buttons: {
-    height: 45,
-    marginTop: 20,
-    width: 343,
-    borderRadius: 40,
-    alignSelf: 'center',
-  },
-  buttonFlexBox: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  button1: {
-    fontSize: FontSize.size_base,
-    fontWeight: '600',
-    fontFamily: FontFamily.poppinsSemibold,
-    color: Color.labelColorDarkPrimary,
-    textAlign: 'center',
-    lineHeight: 20,
-  },
-  button: {
-    alignSelf: 'stretch',
-    paddingHorizontal: Padding.p_98xl,
-    paddingVertical: 0,
-    flex: 1,
-  },
   errorMsg: {
     color: 'red',
     marginBottom: 5,

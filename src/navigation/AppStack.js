@@ -1,9 +1,10 @@
-import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
+
+import { Profile } from '../screens';
 
 import AnimTab2 from './AnimTab2';
 
 import BottomHome from '../screens/BottomScreens/BottomHome';
-import Profile from '../screens/BottomScreens/Profile';
 import Discover from '../screens/BottomScreens/Discover';
 import Relax from '../screens/BottomScreens/Relax';
 
@@ -26,6 +27,7 @@ import DailyTask1 from '../screens/DailyTask/DailyTask1';
 import PainAnalog from '../screens/Recordandprogress/PainAnalog';
 import PainScale from '../screens/Recordandprogress/PainScale';
 import Records from '../screens/Recordandprogress/Records';
+import Done from '../screens/QuestionLES/Done';
 import Preview from '../screens/Preview';
 import Tutorial from '../screens/Auth/Tutorial';
 import Amal from '../screens/Amal';
@@ -66,6 +68,7 @@ const Appstack = () => {
             <Stack.Screen name="PainAnalog" component={PainAnalog} />
             <Stack.Screen name="PainScale" component={PainScale} />
             <Stack.Screen name="Records" component={Records} />
+            <Stack.Screen name="Done" component={Done} />
             <Stack.Screen name="Preview" component={Preview} />
             <Stack.Screen name="Amal" component={Amal} />
             <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />

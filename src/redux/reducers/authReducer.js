@@ -1,7 +1,7 @@
 import * as types from "../const/const"
 
-const InitialState = {
-  Access_token: null,
+const initialState = {
+  access_token: null,
   formone: {},
   formtwo: {},
   formthree: {},
@@ -12,14 +12,16 @@ const InitialState = {
   language: "English",
   languageShort: "en",
   loginType: '',
+  isLogin: false
 };
 
-const authReducer = (state = InitialState, action) => {
+const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case types.LOG_IN:
       return {
         ...state,
         Access_token: action.payload,
+        isLogin: true
       };
     case types.PROFILE:
       return {
@@ -66,7 +68,7 @@ const authReducer = (state = InitialState, action) => {
       };
     case types.LOG_OUT:
       return {
-        ...InitialState,
+        ...initialState,
         language: state.language,
         languageShort: state.languageShort
       };

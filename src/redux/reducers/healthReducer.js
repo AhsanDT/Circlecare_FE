@@ -1,6 +1,6 @@
 import * as types from "../const/const"
 
-const InitialState = {
+const initialState = {
     survey: [],
     daily_articles: [],
     daily_videos: [],
@@ -12,7 +12,7 @@ const InitialState = {
     notifications: []
 };
 
-const surveyReducer = (state = InitialState, action) => {
+const surveyReducer = (state = initialState, action) => {
     switch (action.type) {
         case types.SURVEY:
             return {
@@ -60,7 +60,7 @@ const surveyReducer = (state = InitialState, action) => {
                 notifications: action.payload,
             };
         case types.LOG_OUT:
-            return InitialState;
+            return initialState;
         default:
             return state;
     }

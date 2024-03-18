@@ -79,12 +79,12 @@ const EditProfile = () => {
             />
 
             {/* Nick name */}
-            <AuthInput
+            {/* <AuthInput
               placeholder={t('nick_name')}
-              value={state?.nickname}
+              value={state?.nickname == "nickname" ? state?.first_name : state?.nickname}
               onChangeText={value => handleChange("nickname", value)}
               error={error?.nickname}
-            />
+            /> */}
 
             {/* DOB */}
             <TouchableOpacity

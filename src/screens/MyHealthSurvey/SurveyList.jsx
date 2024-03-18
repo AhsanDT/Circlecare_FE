@@ -167,10 +167,11 @@ const styles = StyleSheet.create({
         minHeight: scale(100)
     },
     titleTxt: {
-        fontSize: textScale(16),
-        color: '#4E4E4E',
-        fontFamily: FontFamily.satoshiVariableBold,
-        fontWeight: '900'
+        fontSize: textScale(18),
+        color: 'black',
+        fontWeight: '700',
+        // color: '#4E4E4E',
+        // fontFamily: FontFamily.satoshiVariableBold,
     },
     descTxt: {
         fontSize: textScale(12),

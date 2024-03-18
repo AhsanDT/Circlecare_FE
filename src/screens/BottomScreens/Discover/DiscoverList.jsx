@@ -166,16 +166,18 @@ const styles = StyleSheet.create({
         color: '#8B8B8B'
     },
     titleTxt: {
-        fontSize: textScale(16),
+        fontSize: textScale(18),
         textAlign: 'left',
-        color: '#4E4E4E',
-        fontFamily: FontFamily.satoshiVariableBold,
-        fontWeight: '900'
+        color: 'black',
+        fontWeight: '700',
+        // color: '#4E4E4E',
+        // fontFamily: FontFamily.satoshiVariableBold,
     },
     descTxt: {
         fontSize: textScale(12),
         textAlign: 'left',
-        color: '#8B8B8B'
+        color: 'black',
+        // color: '#8B8B8B'
     },
 
 

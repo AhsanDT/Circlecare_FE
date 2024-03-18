@@ -21,8 +21,6 @@ const CareScreen = () => {
     const dispatch = useDispatch();
     const language = useSelector((state) => state.auth.language)
 
-    console.log("language =====> ", language);
-
     const [loading, setLoading] = useState(false);
     const [searchText, setSearchText] = useState('');
 
@@ -89,6 +87,7 @@ const styles = StyleSheet.create({
     },
     searchInput: {
         flex: 1,
+        color: 'black',
         paddingVertical: 6,
         fontSize: 16,
     },

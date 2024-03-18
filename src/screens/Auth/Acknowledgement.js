@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Modal, SafeAreaView, StatusBar, } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CheckBox from '@react-native-community/checkbox';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useTranslation } from 'react-i18next';
 
 import Colors from '../../constants/Colors';
-import { Register, googleLogin } from '../../redux/actions/auth.actions';
 import Header from '../../components/Header';
 import GradiantButton from '../../components/GradiantButton';
 import { moderateScale, moderateScaleVertical, scale, textScale } from '../../utils/responsiveSizes';
@@ -18,10 +16,8 @@ import { Color } from '../../../GlobalStyles';
 const Acknowledgement = () => {
   const { t } = useTranslation()
 
-  const navigation = useNavigation();
-  const dispatch = useDispatch();
-
   const data = useSelector(state => state?.auth);
+
   const [sig, setSig] = useState('');
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const [toggleCheckBox1, setToggleCheckBox1] = useState(true);
@@ -60,14 +56,6 @@ const Acknowledgement = () => {
       regular_doctors_appointments:
         data?.formthree?.regular_doctors_appointments,
     };
-
-    // console.log('BODY ===> ', body);
-
-    if (data?.formone?.type == 'google' || data?.formone?.type == 'apple') {
-      dispatch(googleLogin(body, setLoading))
-    } else {
-      dispatch(Register(body, navigation, setLoading));
-    }
   };
 
   return (
@@ -84,6 +72,7 @@ const Acknowledgement = () => {
               <Text style={styles.title}>{t('signature')}</Text>
               <View style={styles.inputFieldParent}>
                 <AuthInput
+                  required
                   placeholder={t('signature')}
                   value={sig}
                   onChangeText={value => setSig(value)}

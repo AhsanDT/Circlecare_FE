@@ -80,11 +80,7 @@ const OTP = () => {
   }
 
   const regenerate = async () => {
-
     setIsActive(true);
-
-
-
 
     await fetch('http://3.87.229.85:8080/appuser/regenerate-otp', {
       method: 'POST',

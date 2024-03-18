@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { base_Url } from '../../config/config';
 import * as types from '../const/const';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -15,7 +14,7 @@ export const EmailCheck = (email, setError) => async dispatch => {
         }
     } catch (error) {
         setError(error?.response?.msg)
-        console.log(JSON.stringify(error?.response));
+        console.log("email check error ===>", JSON.stringify(error?.response));
     }
 };
 
@@ -23,16 +22,16 @@ export const EmailCheck = (email, setError) => async dispatch => {
 export const userLogin = (data, setLoginError, setLoading) => async dispatch => {
     try {
         setLoading(true);
-        const response = await axios.post(`${base_Url}/appuser/login`, data);
+        const response = await instance.post(`/appuser/login`, data);
         if (response) {
             await AsyncStorage.setItem('Token', response?.data?.access_token);
             dispatch({
-                type: types.LOG_IN,
-                payload: response?.data?.access_token,
-            });
-            dispatch({
                 type: types.PROFILE,
                 payload: response?.data?.user,
+            });
+            dispatch({
+                type: types.LOG_IN,
+                payload: response?.data?.access_token,
             });
             // console.log("Login===================", response?.data?.user)
         }
@@ -49,7 +48,7 @@ export const userLogin = (data, setLoginError, setLoading) => async dispatch => 
 export const Register = (data, navigation, setLoading) => async dispatch => {
     try {
         setLoading(true)
-        const response = await axios.post(`${base_Url}/appuser/register`, data);
+        const response = await instance.post(`/appuser/register`, data);
         console.log("SIgup Response ===> ", response);
         if (response) {
             showSuccess(response?.data?.msg)
@@ -72,7 +71,7 @@ export const Register = (data, navigation, setLoading) => async dispatch => {
 export const Activating = (data, setLoading) => async dispatch => {
     try {
         setLoading(true)
-        const response = await axios.post(`${base_Url}/appuser/activate`, data);
+        const response = await instance.post(`/appuser/activate`, data);
         if (response) {
             await AsyncStorage.setItem('Token', response?.data?.access_token);
             dispatch({
@@ -151,7 +150,7 @@ export const createNewPass = (body, navigation, setLoading) => async dispatch =>
 export const googleLogin = (data, setLoading) => async dispatch => {
     try {
         setLoading(true);
-        const response = await axios.post(`${base_Url}/appuser/api/google`, data);
+        const response = await instance.post(`/appuser/api/google`, data);
         if (response) {
             await AsyncStorage.setItem('Token', response?.data?.token || response?.data?.access_token);
             dispatch({

@@ -85,6 +85,7 @@ const Demographics = () => {
       <StatusBar barStyle={'dark-content'} />
       <View flex={1}>
         <Header onPress={() => navigation.goBack()} />
+
         <ScrollView overScrollMode='never' contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
           <View style={styles.container}>
             <View style={{ marginTop: 15, }}>
@@ -93,7 +94,7 @@ const Demographics = () => {
             </View>
 
             <View style={{ marginTop: 10 }}>
-              <Text style={styles.subTitle}>{t('ima')}</Text>
+              <Text style={styles.subTitle}>{t('ima')}<Text style={styles.required}> *</Text></Text>
               <View style={{ marginTop: 10, }}>
                 <RadioButtonRN
                   activeColor={Colors.purple}
@@ -106,7 +107,7 @@ const Demographics = () => {
             </View>
 
             <View style={{ marginTop: 30 }}>
-              <Text style={styles.subTitle}>{t('choose_your_preferred_language')}</Text>
+              <Text style={styles.subTitle}>{t('choose_your_preferred_language')}<Text style={styles.required}> *</Text></Text>
               <View style={{ marginTop: 10, }}>
                 <RadioButtonRN
                   activeColor={Colors.purple}
@@ -118,7 +119,7 @@ const Demographics = () => {
             </View>
 
             <View style={{ marginTop: 30 }}>
-              <Text style={styles.subTitle}>{t('education_level')}</Text>
+              <Text style={styles.subTitle}>{t('education_level')}<Text style={styles.required}> *</Text></Text>
               <View style={{ marginTop: 10, }}>
                 <RadioButtonRN
                   activeColor={Colors.purple}
@@ -155,6 +156,11 @@ const styles = StyleSheet.create({
     fontSize: textScale(16),
     fontWeight: '500',
     color: Colors.black
+  },
+  required: {
+    fontSize: textScale(18),
+    fontWeight: '600',
+    color: Colors.red,
   },
   errorTxt: {
     color: 'red',

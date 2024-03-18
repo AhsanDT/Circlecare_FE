@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useRef } from 'react'
 import { I18nManager, Image, ImageBackground, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import * as Animatable from 'react-native-animatable'
 import { Surface } from 'react-native-paper';
@@ -31,22 +31,21 @@ export default function ColorScreen({ route }) {
     !notification.read.includes(userId)
   ).length;
 
-  const viewRef = React.useRef(null);
-  const [bgColor, setBgColor] = useState();
+  const viewRef = useRef(null);
+  // const [bgColor, setBgColor] = useState();
 
   let logo = useDetermineLogo();
 
-  useEffect(() => {
-    switch (route.name) {
-      case 'Home': { setBgColor(Colors.white); break; }
-      case 'Discover': { setBgColor(Colors.white); break; }
-      case 'Care': { setBgColor(Colors.white); break; }
-      case 'Relax': { setBgColor(Colors.white); break; }
-      case 'Profile': { setBgColor(Colors.white); break; }
-      default: setBgColor(Colors.white);
-    }
-  }, [])
-
+  // useEffect(() => {
+  //   switch (route.name) {
+  //     case 'Home': { setBgColor(Colors.white); break; }
+  //     case 'Discover': { setBgColor(Colors.white); break; }
+  //     case 'Care': { setBgColor(Colors.white); break; }
+  //     case 'Relax': { setBgColor(Colors.white); break; }
+  //     case 'Profile': { setBgColor(Colors.white); break; }
+  //     default: setBgColor(Colors.white);
+  //   }
+  // }, [])
 
   return (
     <View style={{ flex: 1 }}>

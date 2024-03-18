@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, TextInput, Keyboard, ActivityIndicator, I18nManager } from 'react-native';
 import Modal from 'react-native-modal';
 import { useDispatch, useSelector } from 'react-redux';
@@ -5,12 +6,11 @@ import { useTranslation } from 'react-i18next';
 
 import { moderateScale, scale, textScale } from '../../utils/responsiveSizes';
 import { Color, FontFamily } from '../../../GlobalStyles';
-import { useState } from 'react';
 import { showError } from '../../helper/customToast';
 import { appUserDelete } from '../../redux/actions/user.action';
 import Colors from '../../constants/Colors';
 
-const DeleteAccountModal = ({ open, setOpen, logout, userId }) => {
+const DeleteAccountModal = ({ open, setOpen, userId, logout }) => {
     const { t } = useTranslation();
     const isRTL = I18nManager.isRTL;
 
@@ -35,29 +35,20 @@ const DeleteAccountModal = ({ open, setOpen, logout, userId }) => {
             return
         }
 
-        let response = await dispatch(appUserDelete(userId, setIsLoading))
+        let response = await dispatch(appUserDelete(setIsLoading, logout))
         return response;
     }
 
     const handleModalConfirm = async () => {
         if (!isConfirm) {
             setIsConfirm(true);
-        } else if (isConfirm && value.trim().toLowerCase() !== getDeleteConfirmationWord()) {
-            const confirmationWord = language === 'Arabic' ? 'حذف' : 'delete';
-            // showError(`Confirmation is required to ${confirmationWord} the account!`);
-            showError(`Confirmation is required to delete the account!`);
-            return;
-        } else if (isConfirm && !isDeleted) {
+        } else if (isConfirm && (value.trim().toLowerCase() === 'حذف' || value.trim().toLowerCase() === 'delete')) {
             let response = await handleDelete();
             if (response) setIsDeleted(true);
         } else {
-            logout();
+            // showError(`Confirmation is required to ${confirmationWord} the account!`);
+            showError(`Confirmation is required to delete the account!`);
         }
-    };
-
-    const getDeleteConfirmationWord = () => {
-        // Return the appropriate confirmation word based on the selected language
-        return language === 'Arabic' ? 'حذف' : 'delete';
     };
 
     return (

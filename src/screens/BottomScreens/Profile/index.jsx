@@ -1,21 +1,21 @@
-import { useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, View, Pressable, TouchableOpacity, FlatList, I18nManager } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useCallback, useContext, useState } from 'react';
+import { Image, Text, View, Pressable, TouchableOpacity, FlatList, I18nManager } from 'react-native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useTranslation } from 'react-i18next';
+import FastImage from 'react-native-fast-image';
+import ImageResizer from '@bam.tech/react-native-image-resizer';
 
-import Colors from '../../../constants/Colors';
-import { FontFamily } from '../../../../GlobalStyles';
-import { LOG_OUT } from '../../../redux/const/const';
+import { AppContext } from '../../../context/AppContext';
 import { GetProfile, uploadAvatar } from '../../../redux/actions/user.action';
-import { moderateScale, scale, textScale } from '../../../utils/responsiveSizes';
+import { moderateScale } from '../../../utils/responsiveSizes';
 import ConfirmationModal from '../../../components/Modal/ConfirmationModal';
 import SuccessModal from '../../../components/Modal/SuccessModal';
 import DeleteAccountModal from '../../../components/Modal/DeleteAccount';
 import { media_base_Url } from '../../../config/config';
-import FastImage from 'react-native-fast-image';
+import styles from './styles';
+import useLogout from '../../../hooks/useLogout';
 
 const ProfileOption = ({ option, onPress }) => {
     return (
@@ -34,10 +34,14 @@ const Profile = () => {
     const { t } = useTranslation();
     const isRTL = I18nManager.isRTL;
 
-    const navigation = useNavigation();
     const dispatch = useDispatch()
+    const navigation = useNavigation();
+
     const user = useSelector((state) => state?.auth?.profile)
-    const loginType = useSelector((state) => state?.auth?.loginType)
+    // console.log("User ===> ", user);
+
+    const { socket } = useContext(AppContext);
+    const { logout } = useLogout(socket);
 
     const options = [
         {
@@ -59,7 +63,7 @@ const Profile = () => {
             section: t('support'),
             items: [
                 {
-                    name: 'Change Language',
+                    name: t('change_language'),
                     icon: require('../../../../assets/hugeiconinterfaceoutlinehelp.png'),
                     onPress: 'languageChange'
                 },
@@ -97,11 +101,11 @@ const Profile = () => {
         }
     ]
 
-    useEffect(() => {
+    useFocusEffect(useCallback(() => {
         dispatch(GetProfile())
-    }, [])
+    }, []))
 
-    const [IsModified, setIsModified] = useState(false);
+    const [isModified, setIsModified] = useState(false);
     const [success, setSuccess] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
     const [isReqRelete, setIsReqRelete] = useState(false);
@@ -120,12 +124,25 @@ const Profile = () => {
         });
     };
 
-    const handleImageConfirmation = () => {
-        dispatch(uploadAvatar(selectedImage, setSuccess));
+    const handleImageConfirmation = async () => {
+        try {
+            const resizedImage = await ImageResizer.createResizedImage(
+                selectedImage.uri,
+                800,  // New width
+                800,  // New height
+                'JPEG',
+                80,   // Quality
+                0,    // Rotation
+            );
 
-        setTimeout(() => {
-            setIsModified(false);
-        }, 1000);
+            dispatch(uploadAvatar(resizedImage.uri, setSuccess));
+
+            setTimeout(() => {
+                setIsModified(false);
+            }, 1000);
+        } catch (error) {
+            console.error('Error resizing image:', error);
+        }
     };
 
     const handleImageCancle = () => {
@@ -140,22 +157,6 @@ const Profile = () => {
             setIsReqRelete(true)
         } else {
             navigation.navigate(elem.onPress);
-        }
-    }
-
-    const logout = async () => {
-        try {
-            if (loginType === 'google') {
-                const currentUser = await GoogleSignin.getCurrentUser();
-                // Sign out from Google if logged in with Google
-                currentUser && await GoogleSignin.signOut();
-            }
-
-            await dispatch({ type: LOG_OUT });
-            console.log('User successfully logged out.');
-
-        } catch (error) {
-            console.error('Logout failed:', error);
         }
     }
 
@@ -222,8 +223,8 @@ const Profile = () => {
 
             {renderOptionSection()}
 
-            {IsModified && <ConfirmationModal
-                open={IsModified}
+            {isModified && <ConfirmationModal
+                open={isModified}
                 setOpen={setIsModified}
                 message='Are you sure want to update profile photo!'
                 onCancle={handleImageCancle}
@@ -238,92 +239,5 @@ const Profile = () => {
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    title: {
-        paddingTop: 10,
-        fontSize: textScale(18),
-        fontWeight: '600',
-        color: Colors.purple,
-        textAlign: 'center',
-    },
-    profileInfo: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingHorizontal: moderateScale(20),
-        paddingTop: 20
-    },
-    profileTitle: {
-        fontSize: textScale(26),
-        fontWeight: '600',
-        color: Colors.black,
-        paddingBottom: 2
-        // lineHeight: 36
-    },
-    profileSubTitle: {
-        textAlign: 'left',
-        fontSize: textScale(13),
-        fontWeight: '500',
-        color: '#576B74',
-        paddingBottom: 10,
-    },
-
-    singleItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 14
-    },
-    iconCover: {
-        width: scale(44),
-        height: scale(44),
-        borderRadius: scale(44 / 2),
-        backgroundColor: Colors.purpleAlpha,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    icon: {
-        width: scale(24),
-        height: scale(24),
-        tintColor: Colors.purple
-    },
-    singleItemTxt: {
-        fontSize: scale(15),
-        color: '#0C212C',
-        fontFamily: FontFamily.interMedium
-    },
-
-
-    profileImage: {
-        position: 'relative',
-    },
-    profilePlaceholderImage: {
-        backgroundColor: Colors.purpleAlpha,
-        width: scale(56),
-        height: scale(56),
-        borderRadius: scale(56 / 2),
-        borderWidth: 1,
-        borderColor: Colors.purpleAlpha,
-        // padding: 0.8,
-    },
-    imageBtn: {
-        position: 'absolute',
-        bottom: -6,
-        right: 4,
-        zIndex: 1,
-        width: scale(24),
-        height: scale(24),
-        borderRadius: scale(24 / 2),
-        borderWidth: 2,
-        borderColor: 'white',
-        backgroundColor: '#AF6CB8',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    imageBtnIcon: {
-        width: scale(12),
-        height: scale(12),
-    },
-});
 
 export default Profile;

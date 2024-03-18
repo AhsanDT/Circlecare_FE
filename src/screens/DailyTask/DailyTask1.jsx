@@ -40,7 +40,7 @@ const DailyTask1 = () => {
   const convertedDate = momentDate.format('YYYY-MM-DD');
 
   let body = {
-    taskType: activeTab == "tasks" ? "Article" : "Video",
+    taskType: activeTab == 0 ? "Article" : "Video",
     // from_date: formattedDate,
     to_date: date ? convertedDate : tarekh,
   }

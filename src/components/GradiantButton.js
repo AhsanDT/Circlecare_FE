@@ -7,7 +7,7 @@ import { scale, textScale } from '../utils/responsiveSizes';
 const GradiantButton = ({ title, onPress, style, txtStyle, loading = false }) => {
   return (
     <LinearGradient
-      style={{ ...styles.buttons, ...style }}
+      style={[styles.buttons, style]}
       locations={[0, 1]}
       colors={["#bf6bbb", "#716eaa"]}
       useAngle={true}
@@ -16,9 +16,8 @@ const GradiantButton = ({ title, onPress, style, txtStyle, loading = false }) =>
       <TouchableOpacity disabled={loading} style={[styles.pressable, styles.parentFlexBox]} onPress={onPress}>
         {loading ?
           <ActivityIndicator size='small' color="white" />
-          : <Text style={{ ...styles.txt, ...txtStyle }}>{title}</Text>
+          : <Text style={[styles.txt, txtStyle]}>{title}</Text>
         }
-
       </TouchableOpacity>
     </LinearGradient>
   )
